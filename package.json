@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/aaronpflower/socket-chat/issues"
   },
-  "homepage": "https://github.com/aaronpflower/socket-chat#readme"
+  "homepage": "https://github.com/aaronpflower/socket-chat#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "socket.io": "^1.4.6"
+  }
 }
