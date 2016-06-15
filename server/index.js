@@ -20,6 +20,9 @@ io.on('connection', function(socket) {
   socket.on("user typing", function(username) {
   	socket.broadcast.emit('user typing', username)
   })
+  socket.on("user not typing", function(msg) {
+  	socket.broadcast.emit('user not typing', msg)
+  })
 })
 
 http.listen(3000, function () {
