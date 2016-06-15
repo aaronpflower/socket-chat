@@ -5,9 +5,12 @@
 
 	</head>
 		<body>
-
+			<h1>Enter Username </h1>
+			<div id="is-typing"></div>
+			<div id="msg-container"></div>
 			<form id="chat-form">
-			<input id="chat-msg" type="text" name="" value="" placeholder="Your message...">
+				<input id="username" type="text" name="" placeholder="Enter Username....">
+				<input id="chat-msg" type="text" name="" value="" placeholder="Your message...">
 				<input type="submit">	
 			</form>
 			
@@ -15,12 +18,33 @@
 			<script>
 				var formEl = document.getElementById("chat-form");
 				var msgEl = document.getElementById("chat-msg");
+				var typingEl = document.getElementById("is-typing")
+				var msgContainer = document.getElementById("msg-container");
+				var username = document.getElementById("username")
 				var socket = io();
+
 				formEl.addEventListener('submit', function(e){
 					e.preventDefault();
-					socket.emit("chat message", msgEl.value)
+					socket.emit("chat message", {"msg": msgEl.value, "username": username.value})
 					msgEl.value = '';
 					return false;
+				})
+
+				socket.on("chat message", function(obj){
+					obj.username ? msgContainer.innerHTML += "<div class='msg'>"+ obj.username +":"+ obj.msg +"</div>" : msgContainer.innerHTML = " "
+				})
+
+				socket.on("user typing", function(username) {
+					typingEl.innerHTML = "<div class='msg'>" + username +": Is typing..." + "</div>"	
+				})
+
+				msgEl.addEventListener("keydown", function(e) {
+					if (username == null) {
+						// do nothing
+					} else {
+						socket.emit("user typing", username.value)
+						// typingEl.innerHTML = "<div class='msg'>" + username.value +": Is typing..." + "</div>"	
+					}
 				})
 			</script>
 		</body>
