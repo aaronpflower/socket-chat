@@ -9,8 +9,12 @@ app.get('/', function (req, res) {
 
 io.on('connection', function(socket) {
 	console.log("YO YOU CONNECTED");
+  socket.on("chat message", function(msg){
+    console.log(msg)
+  })
 })
 
 http.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
+
