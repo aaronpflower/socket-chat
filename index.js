@@ -2,6 +2,7 @@ var express = require('express')
 var app = express()
 var http = require('http').Server(app)
 var io = require('socket.io')(http)
+var moment = require('moment')
 
 app.use(express.static('public'))
 
@@ -19,10 +20,10 @@ io.on('connection', function (socket) {
     // Broadcast chat message to everyone including sender
     io.emit('chat message', {
       'msg': obj.msg,
-      'username': obj.username
+      'username': obj.username,
+      'date': moment().format('LT')
     })
   })
-
   socket.on('user typing', function (username) {
     // Broadcast message to everyone except sender
     socket.broadcast.emit('user typing', username)

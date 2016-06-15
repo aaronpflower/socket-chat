@@ -11,10 +11,11 @@ var typing = false
 
 formEl.addEventListener('submit', function (e) {
   e.preventDefault()
-  socket.emit('chat message', {
-    'msg': msgEl.value,
-    'username': username.value
-  })
+  if (msgEl.value !== '')
+    socket.emit('chat message', {
+      'msg': msgEl.value,
+      'username': username.value
+    })
   msgEl.value = ''
   return false
 })
@@ -29,12 +30,16 @@ msgEl.addEventListener('keypress', function (e) {
   }
 })
 
+function capitalize (str) {
+  return str[0].toUpperCase() + str.substring(1)
+}
+
 socket.on('chat message', function (obj) {
-  obj.username ? msgContainer.innerHTML += "<li class='msg'>" + obj.username + ':' + obj.msg + '</li>' : msgContainer.innerHTML = ' '
+  obj.username ? msgContainer.innerHTML += "<li class='msg'>" + '<span>' + capitalize(obj.username) + ':</span>' + obj.msg + '</li>' : msgContainer.innerHTML = ' '
 })
 
 socket.on('user typing', function (username) {
-  typingEl.innerHTML = "<li class='msg'>" + username + ': Is typing...' + '</li>'
+  typingEl.innerHTML = "<li class='msg'>" + capitalize(username) + ': Is typing...' + '</li>'
 })
 
 socket.on('user not typing', function () {
